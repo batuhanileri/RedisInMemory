@@ -26,6 +26,8 @@ namespace InMemoryApp.Web.Controllers
             cacheOptions.AbsoluteExpiration = DateTime.Now.AddSeconds(30); //ömrü 30 saniye
             cacheOptions.SlidingExpiration = TimeSpan.FromSeconds(10); //Her 10 saniyede bir erişildiğinde 10 saniye daha uzar
 
+            cacheOptions.Priority = CacheItemPriority.High;
+
                _memoryCache.Set<string>("zaman", DateTime.Now.ToString(),cacheOptions);
             //}
 
