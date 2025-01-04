@@ -28,7 +28,14 @@ namespace InMemoryApp.Web.Controllers
 
             cacheOptions.Priority = CacheItemPriority.High;
 
-               _memoryCache.Set<string>("zaman", DateTime.Now.ToString(),cacheOptions);
+            cacheOptions.RegisterPostEvictionCallback((key, value, reason, state) =>
+            {
+                _memoryCache.Set("callback", $"{key}->{value} => sebep:{reason}");
+
+            });
+
+
+            _memoryCache.Set<string>("zaman", DateTime.Now.ToString(), cacheOptions);
             //}
 
 
@@ -38,8 +45,10 @@ namespace InMemoryApp.Web.Controllers
         public IActionResult Show()
         {
             _memoryCache.TryGetValue("zaman", out string zamancache);
+            _memoryCache.TryGetValue("callback", out string callback);
 
             ViewBag.zaman = zamancache;
+            ViewBag.callback = callback;
             //_memoryCache.Remove("zaman");
 
             //ViewBag.zaman = _memoryCache.Get<string>("zaman");
